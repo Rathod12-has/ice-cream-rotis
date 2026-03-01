@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devi Sri Delights & Food | Zaheerabad</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --gold: #fbc02d;
+            --dark: #2d3436;
+            --white: #ffffff;
+            --green: #25D366; /* WhatsApp Green */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: #fffaf0; color: var(--dark); overflow-x: hidden; padding-bottom: 60px; }
+
+        /* HERO SECTION */
+        .hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.pexels.com/photos/1352296/pexels-photo-1352296.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+        }
+
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 4.5rem); text-shadow: 3px 3px 15px rgba(0,0,0,0.6); margin-bottom: 10px; }
+        .hero-content p { font-size: 1.2rem; letter-spacing: 3px; font-weight: 600; }
+
+        /* MENU SECTION */
+        .menu-section { padding: 60px 20px; text-align: center; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 50px; position: relative; }
+        .section-title::after { content: ''; width: 60px; height: 4px; background: var(--primary-red); position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+
+        /* CARD STYLING */
+        .card {
+            background: white; border-radius: 25px; overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); transition: 0.5s ease; 
+            cursor: pointer; border: 1px solid #eee;
+            opacity: 0; transform: translateY(40px);
+        }
+        .card.show { opacity: 1; transform: translateY(0); }
+        .card:hover { transform: translateY(-15px); border-color: var(--primary-red); }
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        .card-info { padding: 20px; }
+        .card-info h3 { color: var(--primary-red); font-size: 1.3rem; }
+
+        /* MODAL */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(10px); align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 30px; width: 90%; max-width: 500px;
+            position: relative; max-height: 80vh; overflow-y: auto;
+        }
+        .close-btn { position: absolute; right: 25px; top: 15px; font-size: 30px; cursor: pointer; color: #bbb; }
+        
+        .modal-list { list-style: none; margin-top: 20px; }
+        .modal-list li { 
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* BUTTONS */
+        .add-btn {
+            background: var(--primary-red); color: white; border: none; padding: 5px 15px;
+            border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .add-btn:hover { background: var(--dark); }
+
+        /* FLOATING CART BUTTON */
+        .cart-float {
+            position: fixed; bottom: 30px; right: 30px; background: var(--green);
+            color: white; padding: 15px 25px; border-radius: 50px; font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 999;
+            display: none; align-items: center; gap: 10px; border: none;
+        }
+
+        /* CART MODAL SPECIFICS */
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 500; }
+        .order-btn {
+            width: 100%; background: var(--green); color: white; border: none;
+            padding: 15px; border-radius: 15px; font-size: 1.1rem; font-weight: bold;
+            margin-top: 20px; cursor: pointer;
+        }
+
+        footer { background: var(--dark); color: white; padding: 50px 20px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Devi Sri Delights</h1>
+            <p>MILLETS • JUICES • DESSERTS</p>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2 class="section-title">Our Specials</h2>
+        <div class="menu-grid">
+            <div class="card reveal" onclick="openMenu('icecream')">
+                <img class="card-img" src="https://img.freepik.com/premium-photo/various-ice-cream-cones-sea-background_9493-28799.jpg" alt="Ice Cream">
+                <div class="card-info"><h3>Ice Creams</h3><p>Sweetest Scoops</p></div>
+            </div>
+            <div class="card reveal" onclick="openMenu('juice')">
+                <img class="card-img" src="https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80" alt="Juice">
+                <div class="card-info"><h3>Fresh Juice</h3><p>100% Pure Fruit</p></div>
+            </div>
+            <div class="card reveal" onclick="openMenu('jowar')">
+                <img class="card-img" src="https://th.bing.com/th/id/OIP.s5CxfR_x2lzbdLnNk_IPtgHaHa?w=180&h=150&c=6&o=7&dpr=1.1&pid=1.7&rm=3" alt="Jowar">
+                <div class="card-info"><h3>Jowar Roti</h3><p>Traditional Sorghum</p></div>
+            </div>
+            <div class="card reveal" onclick="openMenu('bajra')">
+                <img class="card-img" src="https://fitelo.co/wp-content/uploads/elementor/thumbs/bajra-bhakri-recipe-2-500x500-1-p10mrpsol6m0k06409eo26o7t99l954hcfm9lpf18w.jpg" alt="Bajra">
+                <div class="card-info"><h3>Bajra Roti</h3><p>Pearl Millet Health</p></div>
+            </div>
+        </div>
+    </section>
+
+    <button id="cartFloat" class="cart-float" onclick="showCart()">
+        🛒 View Cart (<span id="cartCount">0</span>)
+    </button>
+
+    <div id="menuModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeMenu()">×</span>
+            <h2 id="modalTitle" style="color: var(--primary-red); font-family: 'Playfair Display', serif;"></h2>
+            <ul id="modalList" class="modal-list"></ul>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCart()">×</span>
+            <h2 style="color: var(--green); font-family: 'Playfair Display', serif;">Your Order</h2>
+            <div id="cartItemsList" style="margin-top:20px;"></div>
+            <hr style="margin: 15px 0;">
+            <input type="text" id="custName" placeholder="Your Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+            <button class="order-btn" onclick="sendWhatsApp()">Place Order via WhatsApp</button>
+        </div>
+    </div>
+
+    <footer>
+        <h3>Devi Sri Delights & Food</h3>
+        <p>Shivani Nagar, Zaheerabad | Cell: 9491413342</p>
+    </footer>
+
+    <script>
+        const menuData = {
+            jowar: { title: "Jowar Specials", items: ["Plain Jowar Roti", "Butter Jowar Roti", "Onion Jowar Roti"] },
+            bajra: { title: "Bajra Specials", items: ["Traditional Bajra Roti", "Masala Bajra Roti", "Bajra Onion Roti"] },
+            juice: { title: "Fresh Juices", items: ["Watermelon", "Sweet Lime", "Pomegranate", "Mixed Fruit", "Orange Juice"] },
+            icecream: { title: "Ice Cream Flavors", items: ["Vanilla Bean", "Belgian Chocolate", "Butterscotch", "Mango Ice Cream", "Pista Badam"] }
+        };
+
+        let cart = {};
+
+        function openMenu(cat) {
+            document.getElementById('modalTitle').innerText = menuData[cat].title;
+            const list = document.getElementById('modalList');
+            list.innerHTML = "";
+            menuData[cat].items.forEach(item => {
+                let li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${item}</span>
+                    <button class="add-btn" onclick="addToCart('${item}')">Add +</button>
+                `;
+                list.appendChild(li);
+            });
+            document.getElementById('menuModal').style.display = "flex";
+        }
+
+        function addToCart(item) {
+            cart[item] = (cart[item] || 0) + 1;
+            updateCartUI();
+            alert(item + " added to cart!");
+        }
+
+        function updateCartUI() {
+            const count = Object.values(cart).reduce((a, b) => a + b, 0);
+            document.getElementById('cartCount').innerText = count;
+            document.getElementById('cartFloat').style.display = count > 0 ? "flex" : "none";
+        }
+
+        function showCart() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            for (const [item, qty] of Object.entries(cart)) {
+                list.innerHTML += `<div class="cart-item"><span>${item} x ${qty}</span> <button onclick="removeFromCart('${item}')" style="background:none; border:none; color:red; cursor:pointer;">Remove</button></div>`;
+            }
+            document.getElementById('cartModal').style.display = "flex";
+        }
+
+        function removeFromCart(item) {
+            delete cart[item];
+            updateCartUI();
+            if (Object.keys(cart).length === 0) closeCart();
+            else showCart();
+        }
+
+        function sendWhatsApp() {
+            const name = document.getElementById('custName').value;
+            if (!name) { alert("Please enter your name"); return; }
+
+            let message = `*New Order from Devi Sri Delights*%0A`;
+            message += `*Customer:* ${name}%0A%0A`;
+            message += `*Items:*%0A`;
+            
+            for (const [item, qty] of Object.entries(cart)) {
+                message += `- ${item} (${qty})%0A`;
+            }
+            
+            message += `%0APlease confirm my order for takeaway!`;
+            
+            const phoneNumber = "919347736645"; // Replace with your WhatsApp number
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+        }
+
+        function closeMenu() { document.getElementById('menuModal').style.display = "none"; }
+        function closeCart() { document.getElementById('cartModal').style.display = "none"; }
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.card').forEach(c => observer.observe(c));
+    </script>
+</body>
+</html>
